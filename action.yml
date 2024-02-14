@@ -31,5 +31,3 @@ outputs:
 runs:
   using: 'docker'
   image: './Dockerfile'
-  args:
-    - -v ${HOME}/.aws:/home/runner/.aws

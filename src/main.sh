@@ -118,6 +118,14 @@ function setup_post_exec {
   done <<< "$post_exec_vars"
 }
 
+function copy_aws_credentials {
+  if [[ -z "${AWS_ACCESS_KEY_ID}" || -z "${AWS_SECRET_ACCESS_KEY}" ]]; then
+    log "AWS credentials are not set, copying from /home/runner/.aws/credentials"
+    mkdir -p ~/.aws
+    cp /home/runner/.aws/credentials ~/.aws/credentials
+  fi
+}
+
 function main {
   log "Starting Terragrunt Action"
   trap 'log "Finished Terragrunt Action execution"' EXIT
@@ -143,6 +151,7 @@ function main {
   fi
   setup_git
   setup_pre_exec
+  copy_aws_credentials
 
   install_terraform "${tf_version}"
   install_terragrunt "${tg_version}"
